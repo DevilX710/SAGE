@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <title>SAGE AI</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <h1>SAGE</h1>
+        <p>Your personal AI</p>
+      </div>
+
+      <div class="status">
+        <span></span>
+        ONLINE
+      </div>
+    </header>
+
+    <!-- Mode Selector -->
+    <div class="modes">
+
+      <button class="mode active" data-mode="ssc">
+        <span>📚</span>
+        <div>
+          <strong>SSC</strong>
+          <small>Study mode</small>
+        </div>
+      </button>
+
+      <button class="mode" data-mode="daily">
+        <span>🌎</span>
+        <div>
+          <strong>DAILY</strong>
+          <small>Everyday AI</small>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- Chat -->
+    <main class="chat" id="chat">
+
+      <div class="welcome">
+        <div class="sage-icon">S</div>
+
+        <h2>Hey, I'm SAGE.</h2>
+
+        <p id="welcomeText">
+          Your SSC study assistant. Ask me anything about your subjects.
+        </p>
+
+        <div class="suggestions">
+
+          <button onclick="useSuggestion('Explain Newton’s second law')">
+            ⚡ Explain Newton's second law
+          </button>
+
+          <button onclick="useSuggestion('Solve an SSC math problem')">
+            ➗ Help me with Math
+          </button>
+
+          <button onclick="useSuggestion('Give me an SSC English paragraph')">
+            📝 English paragraph
+          </button>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Input -->
+    <div class="input-area">
+
+      <button class="icon-btn" id="photoBtn" title="Photo">
+        📷
+      </button>
+
+      <textarea
+        id="messageInput"
+        placeholder="Ask SAGE..."
+        rows="1"
+      ></textarea>
+
+      <button class="send-btn" id="sendBtn">
+        ➤
+      </button>
+
+    </div>
+
+    <div class="footer">
+      SAGE v0.1 • SSC + Daily AI
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
