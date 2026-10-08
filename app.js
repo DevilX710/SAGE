@@ -1,6 +1,20 @@
-// ================================
-// SAGE AI v0.1
-// ================================
+// ==========================================
+// SAGE AI v0.2
+// Real AI connection
+// ==========================================
+
+// YOUR SUPABASE PROJECT
+const SUPABASE_URL =
+  "https://telwykbrnnqqsbbhmbum.supabase.co";
+
+// YOUR SUPABASE PUBLIC ANON/PUBLISHABLE KEY
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHd5a2Jybm5xcXNiYmhtYnVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2MjY0MjQsImV4cCI6MjEwMjIwMjQyNH0._fEIbHzyHtIGboT0Q6zAL2vMGXquQWj9I92yfmymF6Y";
+
+// SAGE EDGE FUNCTION
+const SAGE_FUNCTION_URL =
+  `${SUPABASE_URL}/functions/v1/sage-chat`;
+
 
 let currentMode = "ssc";
 
@@ -10,9 +24,9 @@ const sendBtn = document.getElementById("sendBtn");
 const welcomeText = document.getElementById("welcomeText");
 
 
-// ================================
+// ==========================================
 // MODE SWITCHING
-// ================================
+// ==========================================
 
 document.querySelectorAll(".mode").forEach(button => {
 
@@ -43,11 +57,11 @@ document.querySelectorAll(".mode").forEach(button => {
 });
 
 
-// ================================
+// ==========================================
 // SEND MESSAGE
-// ================================
+// ==========================================
 
-function sendMessage() {
+async function sendMessage() {
 
   const message = input.value.trim();
 
@@ -58,37 +72,71 @@ function sendMessage() {
   input.value = "";
   input.style.height = "42px";
 
-  // Temporary response
-  setTimeout(() => {
+  // Loading message
+  const loading = addMessage("SAGE is thinking...", "ai");
 
-    let response;
+  try {
 
-    if (currentMode === "ssc") {
+    const response = await fetch(SAGE_FUNCTION_URL, {
 
-      response =
-        "I'm SAGE SSC Mode. 🤖\n\n" +
-        "The AI engine isn't connected yet, but this chat interface is working.\n\n" +
-        "Next we'll connect SAGE to its SSC knowledge and AI engine.";
+      method: "POST",
 
-    } else {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "apikey": SUPABASE_ANON_KEY
+      },
 
-      response =
-        "I'm SAGE Daily Mode. 🌎\n\n" +
-        "The AI engine isn't connected yet.\n\n" +
-        "Next we'll connect me to a real AI model.";
+      body: JSON.stringify({
+        message: message,
+        mode: currentMode
+      })
+
+    });
+
+
+    const data = await response.json();
+
+
+    // Remove loading message
+    loading.remove();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error || "SAGE could not connect to the AI."
+      );
 
     }
 
-    addMessage(response, "ai");
 
-  }, 500);
+    addMessage(
+      data.answer || "I couldn't generate an answer.",
+      "ai"
+    );
+
+
+  } catch (error) {
+
+    loading.remove();
+
+    console.error(error);
+
+    addMessage(
+      "⚠️ SAGE couldn't connect right now.\n\n" +
+      "Check your Supabase function and try again.",
+      "ai"
+    );
+
+  }
 
 }
 
 
-// ================================
+// ==========================================
 // ADD MESSAGE
-// ================================
+// ==========================================
 
 function addMessage(text, type) {
 
@@ -108,12 +156,14 @@ function addMessage(text, type) {
 
   chat.scrollTop = chat.scrollHeight;
 
+  return wrapper;
+
 }
 
 
-// ================================
-// SUGGESTION BUTTONS
-// ================================
+// ==========================================
+// SUGGESTIONS
+// ==========================================
 
 function useSuggestion(text) {
 
@@ -126,17 +176,17 @@ function useSuggestion(text) {
 }
 
 
-// ================================
+// ==========================================
 // SEND BUTTON
-// ================================
+// ==========================================
 
 sendBtn.addEventListener("click", sendMessage);
 
 
-// ================================
+// ==========================================
 // ENTER TO SEND
 // SHIFT + ENTER = NEW LINE
-// ================================
+// ==========================================
 
 input.addEventListener("keydown", event => {
 
@@ -151,9 +201,9 @@ input.addEventListener("keydown", event => {
 });
 
 
-// ================================
-// AUTO RESIZE TEXTAREA
-// ================================
+// ==========================================
+// AUTO RESIZE
+// ==========================================
 
 input.addEventListener("input", () => {
 
@@ -165,14 +215,14 @@ input.addEventListener("input", () => {
 });
 
 
-// ================================
+// ==========================================
 // PHOTO BUTTON
-// ================================
+// ==========================================
 
 document.getElementById("photoBtn").addEventListener("click", () => {
 
   alert(
-    "Photo questions will be added when we build SAGE's AI engine."
+    "📷 Photo questions are coming in the next SAGE update!"
   );
 
 });
