@@ -17,7 +17,21 @@ const SAGE_FUNCTION_URL =
 
 
 let currentMode = "ssc";
+// ==========================================
+// SAGE DEVICE ID
+// ==========================================
 
+let deviceId = localStorage.getItem("sage_device_id");
+
+if (!deviceId) {
+  deviceId =
+    "sage_" +
+    Date.now().toString(36) +
+    "_" +
+    Math.random().toString(36).substring(2, 10);
+
+  localStorage.setItem("sage_device_id", deviceId);
+}
 const chat = document.getElementById("chat");
 const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
@@ -88,9 +102,10 @@ async function sendMessage() {
       },
 
       body: JSON.stringify({
-        message: message,
-        mode: currentMode
-      })
+  message: message,
+  mode: currentMode,
+  device_id: deviceId
+})
 
     });
 
